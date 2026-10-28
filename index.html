@@ -4,12 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>Community Programs</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cmask id='m'%3E%3Crect width='64' height='64' fill='white'/%3E%3Ccircle cx='41' cy='28' r='20' fill='black'/%3E%3C/mask%3E%3Ccircle cx='28' cy='34' r='24' fill='%230e5a7e' mask='url(%23m)'/%3E%3Cpolygon points='47.0,8.0 49.2,14.0 55.6,14.2 50.5,18.1 52.3,24.3 47.0,20.7 41.7,24.3 43.5,18.1 38.4,14.2 44.8,14.0' fill='%2312877f'/%3E%3C/svg%3E">
+<title>UD Muslim Community Programs</title>
 <style>
 :root{
   --bg:#eef6f9;--card:#fff;--ink:#12283a;--mute:#4f6476;--line:#d3e0e8;--accent:#0e5a7e;--accent-ink:#fff;--soft:#e2f0f6;--teal:#12877f;--warn:#8a4b00;
   /* Eight-pointed star (khatam) tile */
-  --pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%230e5a7e' stroke-opacity='.14' stroke-width='1.2'%3E%3Crect x='14' y='14' width='52' height='52'/%3E%3Cpolygon points='40,3.2 76.8,40 40,76.8 3.2,40'/%3E%3Ccircle cx='40' cy='40' r='7'/%3E%3Cpath d='M0 -9 9 0 0 9 -9 0ZM80 -9 89 0 80 9 71 0ZM0 71 9 80 0 89 -9 80ZM80 71 89 80 80 89 71 80Z'/%3E%3C/g%3E%3C/svg%3E");
+  --pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%230e5a7e' stroke-opacity='.06' stroke-width='1.2'%3E%3Crect x='14' y='14' width='52' height='52'/%3E%3Cpolygon points='40,3.2 76.8,40 40,76.8 3.2,40'/%3E%3Ccircle cx='40' cy='40' r='7'/%3E%3Cpath d='M0 -9 9 0 0 9 -9 0ZM80 -9 89 0 80 9 71 0ZM0 71 9 80 0 89 -9 80ZM80 71 89 80 80 89 71 80Z'/%3E%3C/g%3E%3C/svg%3E");
   color-scheme:light}
 *{box-sizing:border-box}
 html{min-height:100%;background:var(--bg)}
@@ -52,7 +53,21 @@ h1{font-size:clamp(2rem,7vw,3.1rem);line-height:1.08;margin:4px 0 6px;color:var(
 .btn{display:inline-block;margin-top:14px;background:var(--accent);color:var(--accent-ink);padding:11px 20px;border-radius:9px;font-weight:700;text-decoration:none}
 .btn.alt{background:var(--soft);color:var(--accent)}
 .later{margin:22px 0 8px;font-size:1.1rem;color:var(--mute)}
-.btn:focus-visible,.chip:focus-visible,a:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.bar{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin:0 0 18px}
+.bar .chips{margin:0}
+.tog{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.tog button{border:0;background:none;padding:7px 11px;cursor:pointer;color:var(--mute);line-height:0}
+.tog button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.tog svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.list{display:flex;flex-direction:column;gap:8px;max-width:720px;margin:0 auto}
+.row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:12px;padding:11px 12px 11px 14px;color:inherit;text-decoration:none;box-shadow:0 1px 4px rgba(18,40,58,.08)}
+.row:hover{border-color:var(--accent);border-left-color:var(--accent)}
+.row h2{font-size:1.08rem;margin:0;line-height:1.25}
+.row small{display:block;color:var(--mute);font-size:.82rem;margin-top:1px}
+.row .go{margin-left:auto;flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);display:grid;place-items:center}
+.row .go svg{width:16px;height:16px;stroke:var(--accent-ink);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:480px){.chip{padding:6px 12px;font-size:.86rem}}
+.btn:focus-visible,.chip:focus-visible,.tog button:focus-visible,a:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -70,7 +85,9 @@ const CONFIG = {
 /* ============================================== */
 
 /* Sheet columns: series, series_name, title, date (YYYY-MM-DD), time, location, description,
-   signup_url, status, repeat, flyer_url, link_label, link_url
+   signup_url, status, repeat, flyer_url, link_label, link_url, date_field, event_field
+   - date_field / event_field (optional): the Google Form question ids (like entry.123456789) to pre-fill with the
+     event's date (yyyy-mm-dd) and title. Use the full docs.google.com/forms/... link as signup_url, not a forms.gle link.
    - Recurring program: fill "repeat" (weekly:sat | monthly:first:sat | monthly:last:fri). "date" is an optional start date.
    - One-off event: leave "repeat" blank and give a date.
    - flyer_url: a path like flyers/name.jpg, a full image URL, or a Google Drive share link ("Anyone with the link").
@@ -87,6 +104,9 @@ const DOW = {SUN:0,MON:1,TUE:2,WED:3,THU:4,FRI:5,SAT:6};
 const NTH = {FIRST:1,SECOND:2,THIRD:3,FOURTH:4};
 
 const IC = {
+  list: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+  grid: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>',
+  go: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>',
   cal: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
   clock: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
   pin: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>'
@@ -184,8 +204,20 @@ const line = (ic, t) => t ? `<p class="line">${IC[ic]}<span>${esc(t)}</span></p>
 const dstr = (e, long) => toDate(e.date).toLocaleDateString(undefined, long ? {weekday:"long", month:"long", day:"numeric"} : {weekday:"short", month:"short", day:"numeric"});
 const details = (e, long) => line("cal", dstr(e, long)) + line("clock", e.time) + line("pin", e.location);
 const statusNote = e => e.status === "full" ? `<p class="note">This one is full.</p>` : e.status === "closed" ? `<p class="note">Signup is closed.</p>` : "";
+// Adds this event's date (and optionally its title) to the Google Form link as pre-filled answers.
+function signupUrl(e) {
+  let u = e.signup_url;
+  const add = (field, val) => {
+    if (!u || !field || !val) return;
+    const key = /^entry\./i.test(field) ? field : "entry." + field;
+    u += (u.includes("?") ? "&" : "?") + encodeURIComponent(key) + "=" + encodeURIComponent(val);
+  };
+  add(e.date_field, e.date);
+  add(e.event_field, e.title);
+  return u;
+}
 function buttons(e) {
-  const open = e.status === "open" && e.signup_url ? `<a class="btn" href="${esc(e.signup_url)}" rel="noopener">Sign up</a>` : "";
+  const open = e.status === "open" && e.signup_url ? `<a class="btn" href="${esc(signupUrl(e))}" rel="noopener">Sign up</a>` : "";
   const more = e.link_url ? `<a class="btn alt" href="${esc(e.link_url)}" rel="noopener">${esc(e.link_label || "More info")}</a>` : "";
   return open || more ? `<div class="btns">${open}${more}</div>` : "";
 }
@@ -197,6 +229,13 @@ function card(s) {
   return `<a class="card" href="?s=${encodeURIComponent(s.slug)}" data-link>${s.flyer ? `<img class="thumb" src="${esc(s.flyer)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<div class="body"><h2>${esc(s.name)}</h2><p class="freq">${esc(freq(s))}</p>${body}</div></a>`;
 }
 
+function row(s) {
+  const n = s.upcoming[0];
+  return `<a class="row" href="?s=${encodeURIComponent(s.slug)}" data-link><div><h2>${esc(s.name)}</h2><small>${n ? "Next: " + esc(dstr(n)) : "Date to be announced"}</small></div><span class="go">${IC.go}</span></a>`;
+}
+
+let view = innerWidth < 640 ? "list" : "cards"; // single-row list is the default on phones
+
 function hub(series, filter) {
   $app.className = "wrap";
   const list = [...series.values()].filter(s => !s.ended)
@@ -204,10 +243,14 @@ function hub(series, filter) {
   const shown = list.filter(s => filter === "all" || (filter === "once" ? s.once : !s.once));
   const chips = [["all", "All"], ["rec", "Recurring"], ["once", "One-time events"]]
     .map(([k, n]) => `<button class="chip" data-f="${k}" aria-pressed="${filter === k}">${n}</button>`).join("");
+  const tog = [["list", "List view"], ["cards", "Card view"]]
+    .map(([k, n]) => `<button data-v="${k}" aria-pressed="${view === k}" aria-label="${n}" title="${n}">${IC[k === "list" ? "list" : "grid"]}</button>`).join("");
   document.title = CONFIG.SITE_TITLE;
-  $app.innerHTML = `${header(CONFIG.SITE_TITLE, CONFIG.SITE_TAGLINE)}<div class="chips" role="group" aria-label="Filter programs">${chips}</div>` +
-    (shown.length ? `<div class="grid">${shown.map(card).join("")}</div>` : `<p class="empty">Nothing listed here yet.</p>`);
+  const body = !shown.length ? `<p class="empty">Nothing listed here yet.</p>`
+    : view === "list" ? `<div class="list">${shown.map(row).join("")}</div>` : `<div class="grid">${shown.map(card).join("")}</div>`;
+  $app.innerHTML = `${header(CONFIG.SITE_TITLE, CONFIG.SITE_TAGLINE)}<div class="bar"><div class="chips" role="group" aria-label="Filter programs">${chips}</div><div class="tog" role="group" aria-label="Choose view">${tog}</div></div>${body}`;
   $app.querySelectorAll(".chip").forEach(b => b.onclick = () => hub(series, b.dataset.f));
+  $app.querySelectorAll(".tog button").forEach(b => b.onclick = () => { view = b.dataset.v; hub(series, filter); });
 }
 
 function seriesPage(series, slug) {
