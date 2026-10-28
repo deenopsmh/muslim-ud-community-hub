@@ -4,17 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cmask id='m'%3E%3Crect width='64' height='64' fill='white'/%3E%3Ccircle cx='41' cy='28' r='20' fill='black'/%3E%3C/mask%3E%3Ccircle cx='28' cy='34' r='24' fill='%230e5a7e' mask='url(%23m)'/%3E%3Cpolygon points='47.0,8.0 49.2,14.0 55.6,14.2 50.5,18.1 52.3,24.3 47.0,20.7 41.7,24.3 43.5,18.1 38.4,14.2 44.8,14.0' fill='%2312877f'/%3E%3C/svg%3E">
 <title>UD Muslim Community Programs</title>
 <style>
 :root{
-  --bg:#eef6f9;--card:#fff;--ink:#12283a;--mute:#4f6476;--line:#d3e0e8;--accent:#0e5a7e;--accent-ink:#fff;--soft:#e2f0f6;--teal:#12877f;--warn:#8a4b00;
+  --bg:#eef6f9;--card:#fff;--ink:#12283a;--mute:#4f6476;--line:#d3e0e8;--accent:#0e5a7e;--accent-ink:#fff;--soft:#e2f0f6;--teal:#12877f;--gold:#c27c0e;--warn:#8a4b00;
   /* Eight-pointed star (khatam) tile */
   --pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%230e5a7e' stroke-opacity='.06' stroke-width='1.2'%3E%3Crect x='14' y='14' width='52' height='52'/%3E%3Cpolygon points='40,3.2 76.8,40 40,76.8 3.2,40'/%3E%3Ccircle cx='40' cy='40' r='7'/%3E%3Cpath d='M0 -9 9 0 0 9 -9 0ZM80 -9 89 0 80 9 71 0ZM0 71 9 80 0 89 -9 80ZM80 71 89 80 80 89 71 80Z'/%3E%3C/g%3E%3C/svg%3E");
   color-scheme:light}
 *{box-sizing:border-box}
 html{min-height:100%;background:var(--bg)}
-body{margin:0;min-height:100vh;background:var(--pat) center top/80px 80px,var(--bg);color:var(--ink);font:16px/1.55 "Avenir Next","Segoe UI",system-ui,sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+body{margin:0;min-height:100vh;background:var(--pat) center top/80px 80px,var(--bg);color:var(--ink);font:15.5px/1.6 Inter,"SF Pro Text","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;letter-spacing:-.006em;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
 h1,h2,h3{font-family:Charter,"Iowan Old Style","Palatino Linotype",Georgia,serif;letter-spacing:-.01em}
 a{color:var(--accent)}
 .wrap{max-width:1340px;margin:0 auto;padding:28px 16px 64px}
@@ -25,18 +28,18 @@ h1{font-size:clamp(2rem,7vw,3.1rem);line-height:1.08;margin:4px 0 6px;color:var(
 .tag{color:var(--mute);margin:0;font-size:1.05rem}
 .back{display:inline-block;margin-bottom:6px;font-weight:600;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:4px 14px}
 .chips{display:flex;gap:8px;margin:0 0 20px;flex-wrap:wrap;justify-content:center}
-.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:7px 16px;font:inherit;font-size:.92rem;cursor:pointer}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:7px 15px;font:inherit;font-size:.88rem;font-weight:500;cursor:pointer}
 .chip[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .grid{display:grid;gap:16px;grid-template-columns:1fr}
 @media(min-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1020px){.grid{grid-template-columns:repeat(3,1fr)}}
-.card{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;color:inherit;text-decoration:none;box-shadow:0 2px 8px rgba(18,40,58,.08)}
-.card:hover{border-color:var(--accent);box-shadow:0 4px 14px rgba(18,40,58,.14)}
+.card{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;color:inherit;text-decoration:none;box-shadow:0 1px 2px rgba(18,40,58,.05),0 10px 26px -14px rgba(18,40,58,.24)}
+.card:hover{border-color:var(--accent);box-shadow:0 1px 2px rgba(18,40,58,.06),0 14px 30px -14px rgba(18,40,58,.3)}
 .thumb{flex:none;width:50%;height:auto;border-radius:8px;border:1px solid var(--line);background:var(--soft)}
 .body{min-width:0;flex:1}
 .card h2{font-size:1.2rem;margin:2px 0 0;line-height:1.2}
-.freq{margin:3px 0 8px;font-size:.88rem;color:var(--teal);font-weight:600}
-.line{display:flex;gap:8px;align-items:flex-start;margin:5px 0;font-size:.95rem;color:var(--ink)}
+.freq{margin:3px 0 9px;font-size:.8rem;color:var(--teal);font-weight:600;letter-spacing:.01em}
+.line{display:flex;gap:8px;align-items:flex-start;margin:5px 0;font-size:.9rem;font-weight:450;color:#2b4152}
 .line svg{flex:none;width:18px;height:18px;margin-top:3px;stroke:var(--teal);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .note{color:var(--warn);font-weight:600;margin:6px 0 0;font-size:.92rem}
 .empty{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:16px;margin:0;color:var(--mute);text-align:center}
@@ -44,13 +47,13 @@ h1{font-size:clamp(2rem,7vw,3.1rem);line-height:1.08;margin:4px 0 6px;color:var(
 @media(min-width:760px){.split{grid-template-columns:minmax(300px,430px) 1fr}.flyer{position:sticky;top:20px}}
 .flyer img{display:block;width:100%;height:auto;border-radius:12px;border:1px solid var(--line);box-shadow:0 8px 26px rgba(18,40,58,.18)}
 .flyer small{display:block;margin-top:8px;color:var(--mute);text-align:center}
-.ev{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(18,40,58,.06)}
+.ev{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:12px;box-shadow:0 1px 2px rgba(18,40,58,.05),0 10px 26px -16px rgba(18,40,58,.22)}
 .hero{border:2px solid var(--accent)}
 .ev h3{margin:0 0 8px;font-size:1.5rem;line-height:1.2}
 .ev .line{font-size:1.02rem}
-.desc{margin:12px 0 0}
+.desc{margin:14px 0 0;color:#33495a;line-height:1.68}
 .btns{display:flex;gap:10px;flex-wrap:wrap}
-.btn{display:inline-block;margin-top:14px;background:var(--accent);color:var(--accent-ink);padding:11px 20px;border-radius:9px;font-weight:700;text-decoration:none}
+.btn{display:inline-block;margin-top:14px;background:var(--accent);color:var(--accent-ink);padding:11px 20px;border-radius:10px;font-weight:600;text-decoration:none}
 .btn.alt{background:var(--soft);color:var(--accent)}
 .later{margin:22px 0 8px;font-size:1.1rem;color:var(--mute)}
 .bar{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin:0 0 18px}
@@ -60,14 +63,20 @@ h1{font-size:clamp(2rem,7vw,3.1rem);line-height:1.08;margin:4px 0 6px;color:var(
 .tog button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
 .tog svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .list{display:flex;flex-direction:column;gap:8px;max-width:720px;margin:0 auto}
-.row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:12px;padding:11px 12px 11px 14px;color:inherit;text-decoration:none;box-shadow:0 1px 4px rgba(18,40,58,.08)}
-.row:hover{border-color:var(--accent);border-left-color:var(--accent)}
-.row h2{font-size:1.08rem;margin:0;line-height:1.25}
-.row small{display:block;color:var(--mute);font-size:.82rem;margin-top:1px}
-.row .go{margin-left:auto;flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);display:grid;place-items:center}
-.row .go svg{width:16px;height:16px;stroke:var(--accent-ink);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:14px;padding:8px 10px 8px 14px;box-shadow:0 1px 2px rgba(18,40,58,.05),0 6px 16px -10px rgba(18,40,58,.2)}
+.row.pin{border-left-color:var(--gold)}
+.rowmain{flex:1;min-width:0;color:inherit;text-decoration:none;padding:3px 0}
+.row h2{font-size:1.05rem;margin:0;line-height:1.25}
+.row small{display:block;color:var(--mute);font-size:.8rem;margin-top:1px}
+.acts{display:flex;gap:8px;flex:none}
+.ib{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--accent);color:var(--accent);background:var(--card);text-decoration:none}
+.ib.primary{background:var(--accent);color:var(--accent-ink)}
+.ib:hover{background:var(--soft)}
+.ib.primary:hover{background:#0b4a68}
+.ib svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.flag{width:14px;height:14px;margin-right:6px;vertical-align:-1px;stroke:var(--gold);fill:var(--gold);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
 @media(max-width:480px){.chip{padding:6px 12px;font-size:.86rem}}
-.btn:focus-visible,.chip:focus-visible,.tog button:focus-visible,a:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.btn:focus-visible,.chip:focus-visible,.tog button:focus-visible,.ib:focus-visible,a:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -85,7 +94,8 @@ const CONFIG = {
 /* ============================================== */
 
 /* Sheet columns: series, series_name, title, date (YYYY-MM-DD), time, location, description,
-   signup_url, status, repeat, flyer_url, link_label, link_url, date_field, event_field
+   signup_url, status, repeat, flyer_url, link_label, link_url, date_field, event_field, pinned
+   - pinned (optional): type yes on a row to pin it. Pinned programs show first, earliest date first.
    - date_field / event_field (optional): the Google Form question ids (like entry.123456789) to pre-fill with the
      event's date (yyyy-mm-dd) and title. Use the full docs.google.com/forms/... link as signup_url, not a forms.gle link.
    - Recurring program: fill "repeat" (weekly:sat | monthly:first:sat | monthly:last:fri). "date" is an optional start date.
@@ -104,6 +114,9 @@ const DOW = {SUN:0,MON:1,TUE:2,WED:3,THU:4,FRI:5,SAT:6};
 const NTH = {FIRST:1,SECOND:2,THIRD:3,FOURTH:4};
 
 const IC = {
+  signup: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M19 8v6M16 11h6"/></svg>',
+  info: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>',
+  flag: '<svg class="flag" viewBox="0 0 24 24" role="img" aria-label="Pinned"><title>Pinned</title><path d="M5 21V4"/><path d="M5 4h12l-2.5 4 2.5 4H5z"/></svg>',
   list: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
   grid: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>',
   go: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>',
@@ -193,6 +206,7 @@ async function load() {
   for (const e of events) series.get(e.series).all.push(e);
   for (const s of series.values()) {
     s.upcoming = s.all.filter(e => e.date >= today);
+    s.pinned = /^(y|yes|true|1|x|pin|pinned)$/i.test(((s.upcoming[0] || {}).pinned || "").trim());
     s.once = !s.repeat && s.all.length === 1;
     s.ended = s.all.length > 0 && !s.upcoming.length && !s.repeat;
     s.flyer = flyerSrc((s.upcoming[0] || {}).flyer_url || (s.all.find(e => e.flyer_url) || {}).flyer_url);
@@ -226,12 +240,15 @@ const header = (title, sub) => `<header class="head">${ORN}<h1>${esc(title)}</h1
 function card(s) {
   const n = s.upcoming[0];
   const body = n ? details(n) + statusNote(n) : line("cal", "Next date to be announced");
-  return `<a class="card" href="?s=${encodeURIComponent(s.slug)}" data-link>${s.flyer ? `<img class="thumb" src="${esc(s.flyer)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<div class="body"><h2>${esc(s.name)}</h2><p class="freq">${esc(freq(s))}</p>${body}</div></a>`;
+  return `<a class="card" href="?s=${encodeURIComponent(s.slug)}" data-link>${s.flyer ? `<img class="thumb" src="${esc(s.flyer)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<div class="body"><h2>${s.pinned ? IC.flag : ""}${esc(s.name)}</h2><p class="freq">${esc(freq(s))}</p>${body}</div></a>`;
 }
 
 function row(s) {
   const n = s.upcoming[0];
-  return `<a class="row" href="?s=${encodeURIComponent(s.slug)}" data-link><div><h2>${esc(s.name)}</h2><small>${n ? "Next: " + esc(dstr(n)) : "Date to be announced"}</small></div><span class="go">${IC.go}</span></a>`;
+  const can = n && n.status === "open" && n.signup_url;
+  const signup = can ? `<a class="ib primary" href="${esc(signupUrl(n))}" rel="noopener" aria-label="Sign up for ${esc(s.name)}" title="Sign up">${IC.signup}</a>` : "";
+  const more = `<a class="ib" href="?s=${encodeURIComponent(s.slug)}" data-link aria-label="More details about ${esc(s.name)}" title="More details">${IC.info}</a>`;
+  return `<div class="row${s.pinned ? " pin" : ""}"><a class="rowmain" href="?s=${encodeURIComponent(s.slug)}" data-link><h2>${s.pinned ? IC.flag : ""}${esc(s.name)}</h2><small>${n ? "Next: " + esc(dstr(n)) : "Date to be announced"}</small></a><div class="acts">${signup}${more}</div></div>`;
 }
 
 let view = innerWidth < 640 ? "list" : "cards"; // single-row list is the default on phones
@@ -239,7 +256,7 @@ let view = innerWidth < 640 ? "list" : "cards"; // single-row list is the defaul
 function hub(series, filter) {
   $app.className = "wrap";
   const list = [...series.values()].filter(s => !s.ended)
-    .sort((a, b) => ((a.upcoming[0] || {}).date || "9999").localeCompare((b.upcoming[0] || {}).date || "9999"));
+    .sort((a, b) => (Number(b.pinned) - Number(a.pinned)) || ((a.upcoming[0] || {}).date || "9999").localeCompare((b.upcoming[0] || {}).date || "9999"));
   const shown = list.filter(s => filter === "all" || (filter === "once" ? s.once : !s.once));
   const chips = [["all", "All"], ["rec", "Recurring"], ["once", "One-time events"]]
     .map(([k, n]) => `<button class="chip" data-f="${k}" aria-pressed="${filter === k}">${n}</button>`).join("");
