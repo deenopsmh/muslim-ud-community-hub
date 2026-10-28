@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Community Programs</title>
+<style>
+:root{--bg:#f1f7fa;--card:#fff;--ink:#12283a;--mute:#4f6476;--line:#d3e0e8;--accent:#0e5a7e;--accent-ink:#fff;--soft:#e2f0f6;--teal:#12877f;--warn:#8a4b00;color-scheme:light}
+*{box-sizing:border-box}
+html{height:100%;background:var(--bg)}
+body{margin:0;min-height:100%;background:linear-gradient(180deg,#e2f0f6 0,var(--bg) 240px) no-repeat,var(--bg);color:var(--ink);font:16px/1.55 "Avenir Next","Segoe UI",system-ui,sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+.wrap{max-width:760px;margin:0 auto;padding:30px 18px 60px}
+h1,h2,h3{font-family:Charter,"Iowan Old Style","Palatino Linotype",Georgia,serif;letter-spacing:-.01em}
+h1{font-size:clamp(2rem,6.5vw,2.8rem);line-height:1.08;margin:0 0 6px;color:var(--accent)}
+.tag{color:var(--mute);margin:0 0 22px;font-size:1.05rem}
+a{color:var(--accent)}
+.back{display:inline-block;margin-bottom:14px;font-weight:600;text-decoration:none}
+.chips{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:6px 15px;font:inherit;font-size:.92rem;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.card{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px;color:inherit;text-decoration:none;box-shadow:0 1px 2px rgba(18,40,58,.06)}
+.card:hover{border-color:var(--accent)}
+.thumb{flex:none;width:84px;aspect-ratio:3/4;object-fit:cover;object-position:top;border-radius:7px;border:1px solid var(--line);background:var(--soft)}
+.card h2{font-size:1.2rem;margin:2px 0 0;line-height:1.2}
+.freq{margin:2px 0 6px;font-size:.88rem;color:var(--teal);font-weight:600}
+.next{margin:0;font-weight:600}
+.next span{font-weight:400;color:var(--mute)}
+.meta{color:var(--mute);font-size:.92rem;margin:0}
+.note{color:var(--warn);font-weight:600;margin:6px 0 0;font-size:.92rem}
+.empty{background:var(--soft);border-radius:10px;padding:14px 16px;margin:0 0 12px;color:var(--mute)}
+.split{display:grid;gap:22px;align-items:start}
+@media(min-width:680px){.split{grid-template-columns:1fr 270px}.flyer{position:sticky;top:20px}}
+.ev{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px}
+.hero{border:2px solid var(--accent)}
+.date{flex:none;width:62px;text-align:center;border-right:1px solid var(--line);padding-right:12px}
+.date b{display:block;font-family:Charter,Georgia,serif;font-size:2.1rem;line-height:1;color:var(--accent)}
+.date span{font-size:.82rem;color:var(--mute)}
+.ev h3{margin:0 0 2px;font-size:1.15rem;line-height:1.25}
+.desc{margin:8px 0 0}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-block;margin-top:12px;background:var(--accent);color:var(--accent-ink);padding:10px 18px;border-radius:8px;font-weight:700;text-decoration:none}
+.btn.alt{background:var(--soft);color:var(--accent)}
+.later{margin:24px 0 8px;font-size:1.05rem;color:var(--mute)}
+.flyer img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line);box-shadow:0 6px 20px rgba(18,40,58,.14)}
+.flyer small{display:block;margin-top:6px;color:var(--mute);text-align:center}
+.btn:focus-visible,.chip:focus-visible,a:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app" aria-live="polite">Loading…</div>
+<noscript>This page needs JavaScript to show upcoming programs.</noscript>
+<script>
+/* ============ SETTINGS: edit these ============ */
+const CONFIG = {
+  // Paste your Google Sheet "Publish to web" CSV link between the quotes.
+  // Leave empty to see demo data.
+  SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSmnVdVjb1yon8Y8B0PmVlhdabv7bAZM34AuS1s_T5LnfW3bnPyDA6NjRfgaGJTUIqeqP83y2sTYPI4/pub?gid=886591699&single=true&output=csv",
+  SITE_TITLE: "UD Muslim Youth Community Programs",
+  SITE_TAGLINE: ""
+};
+/* ============================================== */
+
+/* Sheet columns: series, series_name, title, date (YYYY-MM-DD), time, location, description,
+   signup_url, status, repeat, flyer_url, link_label, link_url
+   - Recurring program: fill "repeat" (weekly:sat | monthly:first:sat | monthly:last:fri). "date" is an optional start date.
+   - One-off event: leave "repeat" blank and give a date.
+   - flyer_url: a path like flyers/name.jpg, a full image URL, or a Google Drive share link ("Anyone with the link").
+   - status: open (default) | closed | full | cancelled */
+
+const $app = document.getElementById("app");
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad = n => String(n).padStart(2, "0");
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const today = iso(new Date());
+const toDate = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d); };
+const DAYN = {SUN:"Sunday",MON:"Monday",TUE:"Tuesday",WED:"Wednesday",THU:"Thursday",FRI:"Friday",SAT:"Saturday"};
+const DOW = {SUN:0,MON:1,TUE:2,WED:3,THU:4,FRI:5,SAT:6};
+const NTH = {FIRST:1,SECOND:2,THIRD:3,FOURTH:4};
+
+function parseCSV(text) {
+  const rows = []; let row = [], cur = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i+1] === '"') { cur += '"'; i++; } else q = false; } else cur += c; }
+    else if (c === '"') q = true;
+    else if (c === ",") { row.push(cur); cur = ""; }
+    else if (c === "\n" || c === "\r") { if (c === "\r" && text[i+1] === "\n") i++; row.push(cur); rows.push(row); row = []; cur = ""; }
+    else cur += c;
+  }
+  if (cur || row.length) { row.push(cur); rows.push(row); }
+  const head = rows.shift().map(h => h.trim().toLowerCase());
+  return rows.filter(r => r.some(x => x.trim())).map(r => Object.fromEntries(head.map((h, i) => [h, (r[i] || "").trim()])));
+}
+
+function expand(r) {
+  if (!r.repeat) return [r];
+  const [kind, a, b] = r.repeat.toUpperCase().split(":");
+  const startStr = /^\d{4}-\d{2}-\d{2}$/.test(r.date) && r.date > today ? r.date : today;
+  const end = new Date(); end.setDate(end.getDate() + 120);
+  const out = [];
+  for (const d = toDate(startStr); d <= end; d.setDate(d.getDate() + 1)) {
+    let ok = false;
+    if (kind === "WEEKLY") ok = d.getDay() === DOW[a];
+    else if (kind === "MONTHLY" && d.getDay() === DOW[b]) {
+      const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+      ok = a === "LAST" ? d.getDate() + 7 > lastDay : Math.ceil(d.getDate() / 7) === NTH[a];
+    }
+    if (ok) out.push({...r, date: iso(d)});
+  }
+  return out;
+}
+
+function flyerSrc(u) {
+  if (!u) return "";
+  const m = u.match(/drive\.google\.com\/file\/d\/([\w-]+)/) || u.match(/drive\.google\.com\/(?:open|uc)\?[^#]*id=([\w-]+)/);
+  return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w1200` : u;
+}
+
+function freq(s) {
+  if (s.repeat) {
+    const [k, a, b] = s.repeat.toUpperCase().split(":");
+    if (k === "WEEKLY" && DAYN[a]) return `Every ${DAYN[a]}`;
+    if (k === "MONTHLY" && (NTH[a] || a === "LAST") && DAYN[b]) return `${a[0] + a.slice(1).toLowerCase()} ${DAYN[b]} of each month`;
+  }
+  return !s.all.length ? "Coming soon" : s.all.length > 1 ? "Event series" : "One-time event";
+}
+
+function demoRows() {
+  const d = n => { const x = new Date(); x.setDate(x.getDate() + n); return iso(x); };
+  return [
+    {series:"cleanup",series_name:"Community Clean Up",title:"Community Clean Up",date:"",time:"After Asr",location:"Masjid Al-Madinah",description:"Gloves and bags provided.",repeat:"monthly:last:sat",status:"open"},
+    {series:"bookclub",series_name:"Monthly Book Club",title:"Monthly Book Club",date:"",time:"After Maghrib",location:"",description:"Read the book first, then discuss.",repeat:"monthly:last:fri",status:"open"},
+    {series:"family-night",series_name:"Youth & Family Night",title:"Youth & Family Night",date:d(3),time:"After Maghrib",location:"Masjid Al-Madinah",description:"A one-time evening with a guest scholar. Dinner provided.",status:"open"}
+  ];
+}
+
+async function load() {
+  let rows;
+  if (!CONFIG.SHEET_CSV_URL) rows = demoRows();
+  else {
+    const res = await fetch(CONFIG.SHEET_CSV_URL, {cache: "no-store"});
+    if (!res.ok) throw new Error("Sheet request failed");
+    rows = parseCSV(await res.text());
+  }
+  const norm = rows.filter(r => r.series && (r.status || "").toLowerCase() !== "cancelled")
+    .map(r => ({...r, series: r.series.toLowerCase(), status: (r.status || "open").toLowerCase()}));
+  const events = norm.flatMap(expand).filter(r => /^\d{4}-\d{2}-\d{2}$/.test(r.date))
+    .sort((a, b) => a.date.localeCompare(b.date) || (a.time || "").localeCompare(b.time || ""));
+  // Every series in the sheet appears, even one with no dates yet (a row with a blank date).
+  const series = new Map();
+  for (const r of norm) {
+    if (!series.has(r.series)) series.set(r.series, {slug: r.series, name: r.series_name || r.series, all: [], repeat: ""});
+    const s = series.get(r.series);
+    if (r.series_name) s.name = r.series_name;
+    if (r.repeat) s.repeat = r.repeat;
+  }
+  for (const e of events) series.get(e.series).all.push(e);
+  for (const s of series.values()) {
+    s.upcoming = s.all.filter(e => e.date >= today);
+    s.once = !s.repeat && s.all.length === 1;
+    s.ended = s.all.length > 0 && !s.upcoming.length && !s.repeat;
+    s.flyer = flyerSrc((s.upcoming[0] || {}).flyer_url || (s.all.find(e => e.flyer_url) || {}).flyer_url);
+  }
+  return series;
+}
+
+function dateBlock(e) {
+  const d = toDate(e.date);
+  return `<div class="date"><b>${d.getDate()}</b><span>${d.toLocaleDateString(undefined, {month:"short"})}</span></div>`;
+}
+function metaLine(e) {
+  const day = toDate(e.date).toLocaleDateString(undefined, {weekday:"long"});
+  return [day, e.time, e.location].filter(Boolean).map(esc).join(" · ");
+}
+function statusNote(e) {
+  return e.status === "full" ? `<p class="note">This one is full.</p>` : e.status === "closed" ? `<p class="note">Signup is closed.</p>` : "";
+}
+function buttons(e) {
+  const open = e.status === "open" && e.signup_url ? `<a class="btn" href="${esc(e.signup_url)}" rel="noopener">Sign up</a>` : "";
+  const more = e.link_url ? `<a class="btn alt" href="${esc(e.link_url)}" rel="noopener">${esc(e.link_label || "More info")}</a>` : "";
+  return open || more ? `<div class="btns">${open}${more}</div>` : "";
+}
+
+function card(s) {
+  const n = s.upcoming[0];
+  const when = n ? `<p class="next">${esc(toDate(n.date).toLocaleDateString(undefined, {weekday:"short", month:"short", day:"numeric"}))} <span>${esc(n.time || "")}</span></p><p class="meta">${esc(n.location || "")}</p>${statusNote(n)}`
+                 : `<p class="meta">Next date to be announced</p>`;
+  return `<a class="card" href="?s=${encodeURIComponent(s.slug)}" data-link>${s.flyer ? `<img class="thumb" src="${esc(s.flyer)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<div><h2>${esc(s.name)}</h2><p class="freq">${esc(freq(s))}</p>${when}</div></a>`;
+}
+
+function hub(series, filter) {
+  const list = [...series.values()].filter(s => !s.ended)
+    .sort((a, b) => ((a.upcoming[0] || {}).date || "9999").localeCompare((b.upcoming[0] || {}).date || "9999"));
+  const shown = list.filter(s => filter === "all" || (filter === "once" ? s.once : !s.once));
+  const chips = [["all", "All"], ["rec", "Recurring"], ["once", "One-time events"]]
+    .map(([k, n]) => `<button class="chip" data-f="${k}" aria-pressed="${filter === k}">${n}</button>`).join("");
+  document.title = CONFIG.SITE_TITLE;
+  $app.innerHTML = `<h1>${esc(CONFIG.SITE_TITLE)}</h1><p class="tag">${esc(CONFIG.SITE_TAGLINE)}</p>
+    <div class="chips" role="group" aria-label="Filter programs">${chips}</div>${shown.map(card).join("") || `<p class="empty">Nothing listed here yet.</p>`}`;
+  $app.querySelectorAll(".chip").forEach(b => b.onclick = () => hub(series, b.dataset.f));
+}
+
+function seriesPage(series, slug) {
+  const s = series.get(slug);
+  const back = `<a class="back" href="./" data-link>← All programs</a>`;
+  if (!s) { $app.innerHTML = `${back}<h1>Program not found</h1><p class="tag">Check the link, or pick a program from the full list.</p>`; return; }
+  document.title = `${s.name} · ${CONFIG.SITE_TITLE}`;
+  const [next, ...rest] = s.upcoming;
+  const info = s.ended ? `<p class="empty">This event has passed. See the full list for what’s coming up.</p>`
+    : next ? `<div class="ev hero">${dateBlock(next)}<div><h3>${esc(next.title)}</h3><p class="meta">${metaLine(next)}</p>${next.description ? `<p class="desc">${esc(next.description)}</p>` : ""}${statusNote(next)}${buttons(next)}</div></div>`
+    : `<p class="empty">The next date hasn’t been announced yet. Check back soon.</p>`;
+  const later = rest.length ? `<h2 class="later">Later dates</h2>` + rest.slice(0, 6).map(e => `<div class="ev">${dateBlock(e)}<div><h3>${esc(e.title)}</h3><p class="meta">${metaLine(e)}</p></div></div>`).join("") : "";
+  const fly = s.flyer ? `<div class="flyer"><a href="${esc(s.flyer)}" target="_blank" rel="noopener"><img src="${esc(s.flyer)}" alt="Flyer for ${esc(s.name)}" onerror="this.closest('.flyer').remove()"></a><small>Tap to view full size</small></div>` : "";
+  $app.innerHTML = `${back}<h1>${esc(s.name)}</h1><p class="tag">${esc(freq(s))}</p><div class="split"><div>${info}${later}</div>${fly}</div>`;
+}
+
+let data;
+function route() {
+  const slug = new URLSearchParams(location.search).get("s");
+  slug ? seriesPage(data, slug.toLowerCase()) : hub(data, "all");
+  window.scrollTo(0, 0);
+}
+document.addEventListener("click", e => {
+  const a = e.target.closest("a[data-link]");
+  if (!a || e.metaKey || e.ctrlKey) return;
+  e.preventDefault(); history.pushState({}, "", a.getAttribute("href")); route();
+});
+addEventListener("popstate", route);
+load().then(d => { data = d; route(); })
+  .catch(() => { $app.innerHTML = `<h1>Couldn’t load programs</h1><p class="tag">Check your connection and refresh. If you run this site, confirm the sheet is published to the web as CSV.</p>`; });
+</script>
+</body>
+</html>
