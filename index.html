@@ -390,23 +390,41 @@ position: relative;
   border-top: 1px solid var(--line);
 }
 .details-btns .btn {
-  width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--accent);
-  color: var(--accent-ink);
-  padding: 12px 20px;
-  border-radius: 12px;
+  height: 40px;                  /* Set button height to 40px */
+  padding: 0 18px;               /* Adjust horizontal padding for standard button proportions */
+  border-radius: 10px;           /* Clean, modern rounded corners */
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   text-decoration: none;
   border: 1px solid transparent;
   white-space: nowrap;
+  background: var(--accent);
+  color: var(--accent-ink);
 }
-.details-btns .btn.alt { background: var(--soft); color: var(--accent); border-color: var(--line); }
-.details-btns .btn:hover { opacity: 0.92; }
+/* Ensure embedded SVGs inside single-page buttons are sized appropriately (e.g. 18px x 18px) */
+.details-btns .btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.details-btns .btn.alt { 
+  background: var(--soft); 
+  color: var(--accent); 
+  border-color: var(--line); 
+}
+.details-btns .btn:hover { 
+  opacity: 0.92; 
+}
+
 
 .later { margin: 28px 0 12px; font-size: 1.15rem; color: var(--ink); }
 .empty { background: var(--card); border: 1px dashed var(--line); border-radius: 14px; padding: 20px; color: var(--mute); text-align: center; }
