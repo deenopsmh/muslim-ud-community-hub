@@ -122,7 +122,7 @@ h1 { font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.1; margin: 6px 0 6px; c
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   font-weight: 600;
   text-decoration: none;
   background: var(--card);
@@ -297,43 +297,96 @@ h1 { font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.1; margin: 6px 0 6px; c
 .ib.primary:hover { opacity: 0.9; }
 .ib svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* Details/Series Page */
-.split { display: grid; gap: 24px; align-items: start; }
-@media(min-width: 760px) {
-  .split { grid-template-columns: minmax(300px, 400px) 1fr; }
-  .flyer { position: sticky; top: 20px; }
-}
-.flyer img { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line); box-shadow: 0 8px 24px var(--shadow); }
-.flyer small { display: block; margin-top: 8px; color: var(--mute); text-align: center; }
-
-.ev {
+/* Details/Series Page - Large Vertical Flyer on Left, Details on Right, Buttons Below */
+.details-card {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 8px var(--shadow);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 16px var(--shadow);
+  margin-bottom: 24px;
 }
-.hero { border: 2px solid var(--accent); }
-.ev h3 { margin: 0 0 10px; font-size: 1.4rem; line-height: 1.2; color: var(--ink); }
-.desc { margin: 14px 0 0; color: var(--ink); opacity: 0.9; line-height: 1.65; }
-.btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+
+.details-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media(min-width: 760px) {
+  .details-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    align-items: start;
+  }
+}
+
+.flyer-vertical {
+  width: 100%;
+}
+.flyer-vertical img {
+  display: block;
+  width: 100%;
+  max-height: 520px;
+  object-fit: cover;
+  aspect-ratio: 3 / 4;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 18px var(--shadow);
+  transition: transform 0.2s ease;
+}
+.flyer-vertical img:hover {
+  transform: scale(1.01);
+}
+.flyer-vertical small {
+  display: block;
+  margin-top: 8px;
+  color: var(--mute);
+  text-align: center;
+  font-size: 0.82rem;
+}
+
+.details-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+.details-info h3 {
+  margin: 0 0 12px;
+  font-size: 1.55rem;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.action-row {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  margin-top: 4px;
+}
+
+.btns { display: flex; gap: 12px; flex-wrap: wrap; }
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background: var(--accent);
   color: var(--accent-ink);
-  padding: 10px 20px;
-  border-radius: 10px;
+  padding: 12px 24px;
+  border-radius: 12px;
   font-weight: 600;
+  font-size: 0.95rem;
   text-decoration: none;
   border: 1px solid transparent;
+  flex: 1;
+  min-width: 160px;
 }
 .btn.alt { background: var(--soft); color: var(--accent); border-color: var(--line); }
-.btn:hover { opacity: 0.9; }
+.btn:hover { opacity: 0.92; }
 
-.later { margin: 24px 0 10px; font-size: 1.15rem; color: var(--ink); }
+.later { margin: 28px 0 12px; font-size: 1.15rem; color: var(--ink); }
 .empty { background: var(--card); border: 1px dashed var(--line); border-radius: 14px; padding: 20px; color: var(--mute); text-align: center; }
 
 .btn:focus-visible, .chip:focus-visible, .tog button:focus-visible, .ib:focus-visible, .theme-btn:focus-visible, a:focus-visible {
@@ -653,20 +706,41 @@ function seriesPage(series, slug) {
   }
   document.title = `${s.name} · ${CONFIG.SITE_TITLE}`;
   const [next, ...rest] = s.upcoming;
-  const info = s.ended ? `<p class="empty">This event series has passed. See the full list for upcoming events.</p>`
-    : next ? `<div class="ev hero"><h3>${esc(next.title)}</h3>${details(next, true)}${next.description ? `<p class="desc">${esc(next.description)}</p>` : ""}${statusNote(next)}${buttons(next)}</div>`
+  
+  const flyHtml = s.flyer ? `
+    <div class="flyer-vertical">
+      <a href="${esc(s.flyer)}" target="_blank" rel="noopener">
+        <img src="${esc(s.flyer)}" alt="Flyer for ${esc(s.name)}" onerror="this.closest('.flyer-vertical').remove()">
+      </a>
+      <small>Tap flyer to view full size</small>
+    </div>` : "";
+
+  const infoHtml = s.ended ? `<p class="empty">This event series has passed. See the full list for upcoming events.</p>`
+    : next ? `
+      <div class="details-info">
+        <h3>${esc(next.title)}</h3>
+        ${details(next, true)}
+        ${next.description ? `<p class="desc">${esc(next.description)}</p>` : ""}
+        ${statusNote(next)}
+      </div>`
     : `<p class="empty">The next date hasn’t been announced yet. Check back soon.</p>`;
 
-  const later = rest.length ? `<h2 class="later">Upcoming Later Dates</h2><div class="ev">${rest.slice(0, 6).map(e => line("cal", dstr(e) + (e.time ? ` · ${e.time}` : ""))).join("")}</div>` : "";
-  const fly = s.flyer ? `<div class="flyer"><a href="${esc(s.flyer)}" target="_blank" rel="noopener"><img src="${esc(s.flyer)}" alt="Flyer for ${esc(s.name)}" onerror="this.closest('.flyer').remove()"></a><small>Tap flyer to view full size</small></div>` : "";
+  const btnsHtml = next ? buttons(next) : "";
+  const actionRow = btnsHtml ? `<div class="action-row">${btnsHtml}</div>` : "";
+
+  const later = rest.length ? `<h2 class="later">Upcoming Later Dates</h2><div class="details-card">${rest.slice(0, 6).map(e => line("cal", dstr(e) + (e.time ? ` · ${e.time}` : ""))).join("")}</div>` : "";
 
   $app.innerHTML = `
     ${header(s.name, freq(s))}
     ${back}
-    <div class="split">
-      ${fly}
-      <div>${info}${later}</div>
+    <div class="details-card">
+      <div class="details-grid">
+        ${flyHtml}
+        ${infoHtml}
+        ${actionRow}
+      </div>
     </div>
+    ${later}
   `;
 
   renderThemeBtn();
