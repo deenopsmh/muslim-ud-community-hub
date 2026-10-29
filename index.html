@@ -199,7 +199,7 @@ h1 { font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.1; margin: 6px 0 6px; c
 
 /* Pinned Badge */
 .pin-badge-slot {
-  min-height: 26px; /* Matches the height + bottom margin of the pin-badge */
+  min-height: 26px;
   margin-bottom: 10px;
 }
 
@@ -216,7 +216,7 @@ h1 { font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.1; margin: 6px 0 6px; c
   letter-spacing: 0.05em;
   padding: 3px 10px;
   border-radius: 99px;
-  margin: 0; /* Handled by the parent slot now */
+  margin: 0;
   width: fit-content;
 }
 .pin-badge svg { width: 13px; height: 13px; fill: var(--gold); stroke: var(--gold); }
@@ -302,7 +302,7 @@ h1 { font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.1; margin: 6px 0 6px; c
 .ib.primary:hover { opacity: 0.9; }
 .ib svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* Details/Series Page - Large Vertical Flyer on Left, Details on Right, Buttons Below */
+/* Details/Series Page Layout */
 .details-card {
   background: var(--card);
   border: 1px solid var(--line);
@@ -326,32 +326,11 @@ h1 { font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.1; margin: 6px 0 6px; c
   }
 }
 
+/* Flyer Vertical Container with Blurred Background & Contain Image */
 .flyer-vertical {
   width: 100%;
 }
-.flyer-vertical img {
-  display: block;
-  width: 100%;
-  max-height: 520px;
-  object-fit: cover;
-  aspect-ratio: 3 / 4;
-  border-radius: 14px;
-  border: 1px solid var(--line);
-  box-shadow: 0 6px 18px var(--shadow);
-  transition: transform 0.2s ease;
-}
-.flyer-vertical img:hover {
-  transform: scale(1.01);
-}
-.flyer-vertical small {
-  display: block;
-  margin-top: 8px;
-  color: var(--mute);
-  text-align: center;
-  font-size: 0.82rem;
-}
-
-  .flyer-wrapper {
+.flyer-wrapper {
   position: relative;
   width: 100%;
   aspect-ratio: 3 / 4;
@@ -362,31 +341,33 @@ h1 { font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.1; margin: 6px 0 6px; c
   box-shadow: 0 6px 18px var(--shadow);
   background: var(--card);
 }
-
-/* Blurred background image layer */
 .flyer-blur-bg {
   position: absolute;
-  inset: -20px; /* Expands slightly beyond bounds to hide blur edges */
+  inset: -20px;
   background-size: cover;
   background-position: center;
   filter: blur(16px) brightness(0.7) opacity(0.85);
-  transform: scale(1.1); /* Prevents white blur edges */
+  transform: scale(1.1);
   z-index: 1;
 }
-
-/* Foreground image (contained to show full flyer) */
 .flyer-main-img {
   position: relative;
   z-index: 2;
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain; /* Ensures entire photo/flyer is completely visible */
+  object-fit: contain;
   transition: transform 0.2s ease;
 }
-
 .flyer-wrapper:hover .flyer-main-img {
   transform: scale(1.02);
+}
+.flyer-vertical small {
+  display: block;
+  margin-top: 8px;
+  color: var(--mute);
+  text-align: center;
+  font-size: 0.82rem;
 }
 
 .details-info {
@@ -502,7 +483,6 @@ function toggleTheme() {
   applyTheme(newTheme);
 }
 
-// Automatically react to device/OS theme preference changes if no manual override is saved
 mediaQuery.addEventListener("change", e => {
   if (!localStorage.getItem("theme")) {
     applyTheme(e.matches ? "dark" : "light");
@@ -751,7 +731,7 @@ function seriesPage(series, slug) {
   document.title = `${s.name} · ${CONFIG.SITE_TITLE}`;
   const [next, ...rest] = s.upcoming;
   
-const flyHtml = s.flyer ? `
+  const flyHtml = s.flyer ? `
     <div class="flyer-vertical">
       <div class="flyer-wrapper">
         <div class="flyer-blur-bg" style="background-image: url('${esc(s.flyer)}');"></div>
