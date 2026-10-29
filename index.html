@@ -373,7 +373,6 @@ h1 { font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.1; margin: 6px 0 6px; c
 .details-info {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   height: 100%;
 }
 .details-info h3 {
@@ -383,30 +382,32 @@ h1 { font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.1; margin: 6px 0 6px; c
   color: var(--ink);
 }
 
-.action-row {
-  grid-column: 1 / -1;
+.details-btns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding-top: 16px;
   border-top: 1px solid var(--line);
-  padding-top: 20px;
-  margin-top: 4px;
 }
-
-.btns { display: flex; gap: 12px; flex-wrap: wrap; }
-.btn {
+.details-btns .btn {
+  width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   background: var(--accent);
   color: var(--accent-ink);
-  padding: 12px 24px;
+  padding: 12px 20px;
   border-radius: 12px;
   font-weight: 600;
   font-size: 0.95rem;
   text-decoration: none;
   border: 1px solid transparent;
+  white-space: nowrap;
 }
-.btn.alt { background: var(--soft); color: var(--accent); border-color: var(--line); }
-.btn:hover { opacity: 0.92; }
+.details-btns .btn.alt { background: var(--soft); color: var(--accent); border-color: var(--line); }
+.details-btns .btn:hover { opacity: 0.92; }
 
 .later { margin: 28px 0 12px; font-size: 1.15rem; color: var(--ink); }
 .empty { background: var(--card); border: 1px dashed var(--line); border-radius: 14px; padding: 20px; color: var(--mute); text-align: center; }
@@ -611,7 +612,7 @@ function buttons(e) {
   if (!e) return "";
   const open = e.status === "open" && e.signup_url ? `<a class="btn" href="${esc(signupUrl(e))}" target="_blank" rel="noopener">${IC.signup} Sign up</a>` : "";
   const more = e.link_url ? `<a class="btn alt" href="${esc(e.link_url)}" target="_blank" rel="noopener">${esc(e.link_label || "More info")}</a>` : "";
-  return open || more ? `<div class="btns">${open}${more}</div>` : "";
+  return open || more ? `<div class="details-btns">${open}${more}</div>` : "";
 }
 
 const header = (title, sub) => `
@@ -740,6 +741,8 @@ function seriesPage(series, slug) {
       <small>Tap flyer to view full size</small>
     </div>` : "";
 
+  const btnsHtml = next ? buttons(next) : "";
+
   const infoHtml = s.ended ? `<p class="empty">This event series has passed. See the full list for upcoming events.</p>`
     : next ? `
       <div class="details-info">
@@ -747,11 +750,9 @@ function seriesPage(series, slug) {
         ${details(next, true)}
         ${next.description ? `<p class="desc">${esc(next.description)}</p>` : ""}
         ${statusNote(next)}
+        ${btnsHtml}
       </div>`
     : `<p class="empty">The next date hasn’t been announced yet. Check back soon.</p>`;
-
-  const btnsHtml = next ? buttons(next) : "";
-  const actionRow = btnsHtml ? `<div class="action-row">${btnsHtml}</div>` : "";
 
   const later = rest.length ? `<h2 class="later">Upcoming Later Dates</h2><div class="details-card">${rest.slice(0, 6).map(e => line("cal", dstr(e) + (e.time ? ` · ${e.time}` : ""))).join("")}</div>` : "";
 
@@ -762,7 +763,6 @@ function seriesPage(series, slug) {
       <div class="details-grid">
         ${flyHtml}
         ${infoHtml}
-        ${actionRow}
       </div>
     </div>
     ${later}
