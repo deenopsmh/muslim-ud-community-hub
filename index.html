@@ -198,6 +198,11 @@ h1 { font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.1; margin: 6px 0 6px; c
 }
 
 /* Pinned Badge */
+.pin-badge-slot {
+  min-height: 26px; /* Matches the height + bottom margin of the pin-badge */
+  margin-bottom: 10px;
+}
+
 .pin-badge {
   display: inline-flex;
   align-items: center;
@@ -211,13 +216,13 @@ h1 { font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.1; margin: 6px 0 6px; c
   letter-spacing: 0.05em;
   padding: 3px 10px;
   border-radius: 99px;
-  margin-bottom: 10px;
+  margin: 0; /* Handled by the parent slot now */
   width: fit-content;
 }
 .pin-badge svg { width: 13px; height: 13px; fill: var(--gold); stroke: var(--gold); }
 
 .card-content { display: flex; gap: 14px; align-items: flex-start; flex: 1; margin-bottom: 16px; }
-.thumb { width: 100px; height: 100px; object-fit: cover; border-radius: 12px; border: 1px solid var(--line); background: var(--soft); flex-shrink: 0; }
+.thumb { width: 200px; height: 250px; object-fit: cover; border-radius: 12px; border: 1px solid var(--line); background: var(--soft); flex-shrink: 0; }
 .card-body { min-width: 0; flex: 1; }
 .card h2 { font-size: 1.15rem; margin: 0 0 4px; line-height: 1.25; color: var(--ink); }
 .freq { margin: 0 0 8px; font-size: 0.8rem; color: var(--teal); font-weight: 600; letter-spacing: 0.01em; }
@@ -609,8 +614,9 @@ function card(s) {
   const body = n ? details(n) + statusNote(n) : line("cal", "Next date to be announced");
   const canSignup = n && n.status === "open" && n.signup_url;
 
-  const pinnedBadge = s.pinned ? `<div class="pin-badge">${IC.pinBadge} Featured Program</div>` : "";
-
+  const pinnedBadge = `<div class="pin-badge-slot">${
+    s.pinned ? `<div class="pin-badge">${IC.pinBadge} Featured Program</div>` : ""
+  }</div>`;
   const signupBtn = canSignup
     ? `<a class="btn-act primary" href="${esc(signupUrl(n))}" target="_blank" rel="noopener">${IC.signup} Sign Up</a>`
     : "";
